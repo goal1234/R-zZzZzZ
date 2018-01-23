@@ -1,6 +1,7 @@
 data('Journals',package = 'AER')
 dim(Journals)
 names(Journals)
+
 #����ģ��
 j_lm<-lm(log(subs)~log(price/citations),data = Journals)
 abline(j_lm)    #����
@@ -191,6 +192,7 @@ par(mfrow=c(1,1))
 linear.hypothesis(jour_lm,'log(citeprice)=-0.5')
 data("CPS1988")
 summary(CPS1988)
+
 #��Ԫ�ع�
 cps_lm<-lm(log(wage)~experience+I(experience^2)+education+ethnicity,data = CPS1988)
 cps_noeth<-lm(log(wage)~experience+I(experience^2)+education,data = CPS1988)
@@ -198,6 +200,7 @@ anova(cps_noeth,cps_lm) #�Աȷ���
 anova(cps_lm)
 cps_noeth<-update(cps_lm,formula=.~.-ethnicity)
 waldtest(cps_lm,.~.-ethnicity)
+
 #BICѡ��ع�
 library(splines)
 cps_lm<-lm(log(wage)~bs(experience,df=5)+education+ethnicity,data=CPS1988)
@@ -216,12 +219,14 @@ data(CPS1988,package = 'AER')
 cps_int<-lm(log(wage)~experience+I(experience^2)+education*ethnicity,data = CPS1988)
 coeftest(cps_int)
 cps_int<-lm(log(wage)~experience+I(experience^2)+education+ethnicity+education:ethnicity,data=CPS1988)
+
 #ÿ��ˮƽ�µĻع�
 cps_sep<-lm(log(wage)~ethnicity/(experience+I(experience^2)+education)-1,data=CPS1988)
 cps_sep_cf<-matrix(coef(cps_sep),nrow=2)
 rownames(cps_sep_cf)<-levels(CPS1988$ethnicity)
 colnames(cps_sep_cf)<-names(coef(cps_lm)[1:4])
 anova(cps_sep)
+
 #change of reference catagory
 CPS1988$region<-relevel(CPS1988$region,ref = 'south')
 cps_region<-lm(log(wage)~ethnicity+education+experience+I(experience^2)+region,data=CPS1988)
@@ -268,6 +273,7 @@ plot(merge(as.zoo(USMacroG[,"consumption"]), fitted(cons_lm1),
 legend(0.05, 0.95, c("observed", "cons_lm1", "cons_lm2"),lty = 1:3, bty = "n")
 cons_lmE<-dynlm(consumption~dpi+L(dpi)+L(consumption),data=USMacroG)
 anova(cons_lm1,cons_lmE,cons_lm2)
+
 #lmtest��
 library(lmtest)
 encomptest(cons_lm1,cons_lm2)
@@ -326,6 +332,7 @@ data("Journals")
 journals <- Journals[, c("subs", "price")]
 journals$citeprice <- Journals$price/Journals$citations
 journals$age <- 2000 - Journals$foundingyear
+
 #testing for heteroskedasticity
 bptest(jour_lm)
 bptest(jour_lm, ~ log(citeprice) + I(log(citeprice)^2),data = journals)
@@ -333,12 +340,14 @@ gqtest(jour_lm, order.by = ~ citeprice, data = journals)
 resettest(jour_lm)
 raintest(jour_lm, order.by = ~ age, data = journals)
 harvtest(jour_lm, order.by = ~ age, data = journals)
+
 #testing for autocorrelation
 data("USMacroG")
 consump1 <- dynlm(consumption ~ dpi + L(dpi),data = USMacroG)
 dwtest(consump1)
 Box.test(residuals(consump1),type='Ljung-Box')
 bgtest(consump1)
+
 #robust standard errors and tests
 vcov(jour_lm)
 coeftest(jour_lm,vcov=vcovHC)
@@ -348,6 +357,7 @@ ps_lm2<-lm(Expenditure~Income+I(Income^2),data=ps)
 anova(ps_lm,ps_lm2)
 waldtest(ps_lm,ps_lm2,vcov=vcovHC(ps_lm2,type='HC4'))
 rbind(SE=sqrt(diag(vcov(consump1))),QS=sqrt(diag(kernHAC(consump1))),NW=sqrt(diag(NeweyWest(consump1))))
+
 #resistent regression
 data("OECDGrowth",package = 'AER')
 solow_lm <- lm(log(gdp85/gdp60) ~ log(gdp60) +log(invest) + log(popgrowth + .05), data = OECDGrowth)
@@ -420,6 +430,7 @@ dispersiontest(rd_pois,trafo = 2)
 library(MASS)
 rd_nb<-glm.nb(trips~.data=RecreationDemand)
 coeftest(rd_nb)
+
 #robust standard errors
 round(sqrt(rbind(diag(vcov(rd_pois)),diag(sandwich(rd_pois)))),digits = 3)
 coeftest(rd_pois,vcov=sandwich)
@@ -431,6 +442,7 @@ round(colSums(predict(rd_zinb,type='prob')[,1:10]))
 rd_hurdle<-hurdle(trips~.|quality+income,data=RecreationDemand,dist='negbin')
 summary(rd_hurdle)
 round(colSums(predict(rd_hurdle,type='prob')[,1:10]))
+
 #ɾ����ر���
 data('Affairs',package = 'AER')
 aff_tob<-tobit(Affairs~age+yearmarried+religiousness+occupation+rating,data=Affairs)
@@ -438,6 +450,7 @@ summary(aff_tob)
 aff_tob2<-updata(aff_tob,right=4)
 summary(aff_tob2)
 linear.hypothesis(aff_tob,c('age=0','occupation=0'),vcov=sandwich)
+
 #a semiparametric binary response model
 SwissLabor$partnum<-as.numeric(SwissLabor$participation)-1
 library('np')
@@ -446,6 +459,7 @@ summary(swiss_bw)
 swiss_ks<-npindex(bws=swiss_bw,gradients=TRUE)
 summary(swiss_ks)
 table(ACtual=SwissLabor$participation,Predict=round(predict(swiss_probit,type='response')))
+
 #multinomial responses
 data('BankWages',package ='AER')
 edcat<-factor(BankWages$education)
@@ -456,6 +470,7 @@ plot(job~edcat,data=BankWages,off=0)
 library('nnet')
 bank+mnl<-multinom(job~education+minority,data=BankWages,subset=gender=='male',trace=FALSE)
 coeftest(bank_mnl)
+
 #ordianal responses
 library('MASS')
 bank_polr<-polr(job~education+minority,data=BankWages,subset = gender=='male',Hess=TRUE)
@@ -471,6 +486,7 @@ lines(filter(UKDriverDeaths,c(1/2,rep(1,11),1/2)/12),col=2)
 plot(rollapply(UKDriverDeaths,12,sd))
 set.seed(1234)
 x<-filter(rnorm(100),0.9,method = 'recursive')
+
 #decomposition
 dd_dec<-decompose(log(UKDriverDeaths))
 dd_st1<-stl(log(UKDriverDeaths),s.window=13)
@@ -481,6 +497,7 @@ dd_hw<-HoltWinters(dd_past)
 dd_pred<-predict(dd_hw,n.ahead=24)
 plot(dd_hw,dd_pred,ylim = range(UKDriverDeaths))
 lines(UKDriverDeaths)
+
 #classicail model based analysis
 acf(x)
 pacf(x)
