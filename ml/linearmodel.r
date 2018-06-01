@@ -1,42 +1,45 @@
 # Algorithms
-Linear Algorithms:
-
-    Algorithm 1: Linear Regression
-    Algorithm 2: Logistic Regression
-    Algorithm 3: Linear Discriminant Analysis
-
-Nonlinear Algorithms:
-
-    Algorithm 4: Classification and Regression Trees
-    Algorithm 5: Naive Bayes
-    Algorithm 6: K-Nearest Neighbors
-    Algorithm 7: Learning Vector Quantization
-    Algorithm 8: Support Vector Machines
-
-Ensemble Algorithms:
-
-    Algorithm 9: Bagged Decision Trees and Random Forest
-    Algorithm 10: Boosting and AdaBoost
-
-Bonus #1: Gradient Descent
-
-
-    Logistic regression
-    Linear discriminant analysis
-    Mixture disriminant analysis
-    Quadratic Discriminant Analysis
-    Neural Network
-    Flexible Discriminant Analysis
-    Support Vector Machine
-    k-Nearest Neighbors
-    Naive Bayes
-    Classification and Regression Trees (CART)
-    C4.5
-    PART
-    Bagging CART
-    Random Forest
-    Gradient Boosted Machine
-
+if(FALSE){
+  "
+  Linear Algorithms:
+  
+      Algorithm 1: Linear Regression
+      Algorithm 2: Logistic Regression
+      Algorithm 3: Linear Discriminant Analysis
+  
+  Nonlinear Algorithms:
+  
+      Algorithm 4: Classification and Regression Trees
+      Algorithm 5: Naive Bayes
+      Algorithm 6: K-Nearest Neighbors
+      Algorithm 7: Learning Vector Quantization
+      Algorithm 8: Support Vector Machines
+  
+  Ensemble Algorithms:
+  
+      Algorithm 9: Bagged Decision Trees and Random Forest
+      Algorithm 10: Boosting and AdaBoost
+  
+  Bonus #1: Gradient Descent
+  
+  
+      Logistic regression
+      Linear discriminant analysis
+      Mixture disriminant analysis
+      Quadratic Discriminant Analysis
+      Neural Network
+      Flexible Discriminant Analysis
+      Support Vector Machine
+      k-Nearest Neighbors
+      Naive Bayes
+      Classification and Regression Trees (CART)
+      C4.5
+      PART
+      Bagging CART
+      Random Forest
+      Gradient Boosted Machine
+  "
+}
 
 # -Linear Regression Assignment- #
 # https://www.kaggle.com/c/job-salary-prediction
@@ -96,7 +99,7 @@ train$DescripManage <- as.factor(ifelse(grepl("[Mm]anage", train$FullDescription
 
 
 # Modeling: Intercept-only
-# 分一下
+# 分一�?
 set.seed(100)
 train.index <- sample(10000, 7000, replace = FALSE)
 tr <- train[train.index, ]
@@ -105,7 +108,7 @@ val <- train[-train.index, ]
 sqrt(mean((mean(tr$SalaryNormalized) - val$SalaryNormalized)^2))
 
 # Modeling: Linear Models
-# lm模型要整好多遍
+# lm模型要整好多�?
 lm.fit1 <- lm(SalaryNormalized ~ ContractType + ContractTime + Category, data = tr)
 summary(lm.fit1)
 
@@ -130,6 +133,7 @@ sqrt(mean((lm.pred3 - val$SalaryNormalized)^2))
 
 lm.fit4 <- lm(SalaryNormalized ~ ContractType + ContractTime + Category + London + 
     TitleSenior + TitleManage + DescripSenior + DescripManage, data = tr)
+
 summary(lm.fit4)
 lm.pred4 <- predict(lm.fit4, newdata = val)
 sqrt(mean((lm.pred4 - val$SalaryNormalized)^2))
@@ -166,7 +170,7 @@ sqrt(mean((rr.pred - y.val)^2))
 # CV to obtain best lambda
 set.seed(10)
 las.cv <- cv.glmnet(x.tr, y.tr, alpha = 1)
-plot(las.cv
+plot(las.cv)
 
 las.bestlam <- las.cv$lambda.min
 las.goodlam <- las.cv$lambda.1se
@@ -216,6 +220,7 @@ solution$Category <- as.factor(solution$Category)
 solution$SourceName <- as.factor(solution$SourceName)
 solution$Company <- as.factor(solution$Company)
 solution$LocationNormalized <- as.factor(solution$LocationNormalized)
+
 for (i in 1:nrow(solution)) {
     loc <- solution$LocationNormalized[i]
     line.id <- which(grepl(loc, tree))[1]
